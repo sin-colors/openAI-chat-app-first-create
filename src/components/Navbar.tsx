@@ -1,17 +1,10 @@
-import { Menu } from "lucide-react";
 import React from "react";
-import { Button } from "./ui/button";
+import MobileNabvar from "./MobileNabvar";
 
-function Navbar() {
+function Navbar({ chatType }: { chatType: string }) {
   return (
-    <div>
-      <Button
-        size="icon"
-        variant="ghost"
-        className="cursor-pointer hover:bg-transparent lg:hidden"
-      >
-        <Menu />
-      </Button>
+    <div className="flex items-center justify-between p-3">
+      <MobileNabvar chatType={chatType} />
       <div className="ml-auto">userIcon</div>
     </div>
   );
