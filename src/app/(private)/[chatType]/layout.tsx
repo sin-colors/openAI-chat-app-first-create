@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import React from "react";
 
@@ -14,6 +15,7 @@ async function ChatAppLayout({ children, params }: Props) {
         <Sidebar chatType={chatType} />
       </div>
       <main className="flex h-full w-full flex-col bg-blue-500 lg:w-4/5">
+        <Navbar />
         {children}
       </main>
     </div>
