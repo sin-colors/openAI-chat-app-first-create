@@ -1,7 +1,9 @@
 "use server";
-import { ResisterFormValues } from "@/lib/schema";
+import { LoginFormValues, ResisterFormValues } from "@/lib/schema";
 import { PrismaClient } from "@/generated/prisma";
 import bcrypt from "bcryptjs";
+import { signIn } from "@/auth";
+import { CredentialsSignin } from "next-auth";
 
 export async function userRegister({
   name,
@@ -25,5 +27,17 @@ export async function userRegister({
       success: false,
       error: err instanceof Error ? err.message : "エラーが発生しました",
     };
+  }
+}
+
+export async function userAuthorize(data: LoginFormValues) {
+  try {
+    const result = await signIn("credentials", { ...data, redirect: false });
+    if (result) return { success: true, message: "ログインしました" };
+  } catch (err) {
+    console.error(err);
+    if (err instanceof CredentialsSignin)
+      return { success: false, message: err.message };
+    return { success: false, message: "ログインに失敗しました" };
   }
 }

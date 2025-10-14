@@ -1,11 +1,5 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { Button } from "./ui/button";
 import {
   Form,
   FormControl,
@@ -15,49 +9,36 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { resisterFormSchema, ResisterFormValues } from "@/lib/schema";
-import { userRegister } from "@/actions/user";
+import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { loginFormSchema, LoginFormValues } from "@/lib/schema";
+import { toast } from "react-toastify";
+import { userAuthorize } from "@/actions/user";
 
-function RegisterForm() {
-  const form = useForm<ResisterFormValues>({
-    resolver: zodResolver(resisterFormSchema),
+function LoginForm() {
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
   });
   const isSubmitting = form.formState.isSubmitting;
   const router = useRouter();
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(async (data: ResisterFormValues) => {
-          const result = await userRegister(data);
-          if (result.success) {
-            toast.success(result.message, { autoClose: 5000 });
-            setTimeout(() => router.push("/login"), 5000);
+        onSubmit={form.handleSubmit(async (data: LoginFormValues) => {
+          const result = await userAuthorize(data);
+          if (result?.success) {
+            toast.success(result.message);
+            router.push("/home");
           } else {
-            toast.error(result.error || "エラーが発生しました");
+            toast.error(result?.message);
           }
         })}
         className="text-zinc-800"
       >
-        <h1 className="text-center text-3xl font-bold">ユーザー登録</h1>
+        <h1 className="text-center text-3xl font-bold">ログイン</h1>
         <div className="mt-6 flex flex-col gap-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="grid w-full max-w-md min-w-xs items-center gap-1.5">
-                <FormLabel>名前</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    className="w-full"
-                    placeholder="Shingo"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -66,9 +47,9 @@ function RegisterForm() {
                 <FormLabel>メールアドレス</FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
+                    type="email"
                     className="w-full"
-                    placeholder="example@ne.jp"
+                    placeholder="example@com"
                     {...field}
                   />
                 </FormControl>
@@ -84,7 +65,7 @@ function RegisterForm() {
                 <FormLabel>パスワード</FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
+                    type="password"
                     className="w-full"
                     placeholder="８文字以上の英数字"
                     {...field}
@@ -101,7 +82,7 @@ function RegisterForm() {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "送信中" : "登録"}
+            {isSubmitting ? "認証中" : "ログイン"}
           </Button>
         </div>
       </form>
@@ -109,4 +90,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default LoginForm;
