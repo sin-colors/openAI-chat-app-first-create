@@ -66,7 +66,7 @@ function RegisterForm() {
                 <FormLabel>メールアドレス</FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
+                    type="email"
                     className="w-full"
                     placeholder="example@ne.jp"
                     {...field}
@@ -84,7 +84,7 @@ function RegisterForm() {
                 <FormLabel>パスワード</FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
+                    type="password"
                     className="w-full"
                     placeholder="８文字以上の英数字"
                     {...field}

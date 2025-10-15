@@ -9,6 +9,7 @@ function LoginPage() {
       <div className="flex w-full max-w-3xl flex-col items-center justify-center">
         <LoginForm />
         <p className="mt-4">
+          まだアカウントをお持ちでない場合は
           <Button
             size={"sm"}
             variant={"link"}

@@ -9,7 +9,7 @@ function SignupPage() {
       <div className="flex w-full max-w-3xl flex-col items-center justify-center">
         <RegisterForm />
         <p className="mt-4">
-          すでにアカウントをお持ちの場合
+          すでにアカウントをお持ちの場合は
           <Button
             asChild
             size={"sm"}
