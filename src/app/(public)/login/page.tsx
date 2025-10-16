@@ -1,9 +1,13 @@
+import { auth } from "@/auth";
 import LoginForm from "@/components/LoginForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-function LoginPage() {
+async function LoginPage() {
+  const session = await auth();
+  if (session) return redirect("/conversation?error_code=loggedIn");
   return (
     <div className="flex h-full w-full items-center justify-center">
       <div className="flex w-full max-w-3xl flex-col items-center justify-center">

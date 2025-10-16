@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import ErrorHandler from "@/components/ErrorHandler";
 
 const notoSansJp = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${notoSansJp.variable} antialiased`}>
+        <ErrorHandler />
         <ToastContainer position="top-center" autoClose={3000} />
         {children}
       </body>

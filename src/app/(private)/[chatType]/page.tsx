@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -15,8 +16,11 @@ async function ChatTypePage({
 }: {
   params: Promise<{ chatType: string }>;
 }) {
+  const session = await auth();
+  if (!session) return redirect("/login?error_code=loginRequired");
   const { chatType } = await params;
-  if (!allowedRoutes.includes(chatType)) return redirect("/");
+  if (!allowedRoutes.includes(chatType))
+    return redirect("/conversation?error_code=pageNotFound");
   return <div>ChatTypePage: {chatType}ページ</div>;
 }
 
