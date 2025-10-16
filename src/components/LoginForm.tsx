@@ -20,6 +20,10 @@ import { userAuthorize } from "@/actions/user";
 function LoginForm() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const isSubmitting = form.formState.isSubmitting;
   const router = useRouter();
@@ -30,7 +34,7 @@ function LoginForm() {
           const result = await userAuthorize(data);
           if (result?.success) {
             toast.success(result.message);
-            router.push("/home");
+            router.push("/conversation");
           } else {
             toast.error(result?.message);
           }

@@ -21,6 +21,11 @@ import { userRegister } from "@/actions/user";
 function RegisterForm() {
   const form = useForm<ResisterFormValues>({
     resolver: zodResolver(resisterFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   });
   const isSubmitting = form.formState.isSubmitting;
   const router = useRouter();
