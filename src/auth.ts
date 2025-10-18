@@ -6,8 +6,9 @@ import {
   MissingCredentialsError,
   UserNotFoundError,
 } from "./lib/auth-error";
-import { PrismaClient } from "./generated/prisma";
+// import { PrismaClient } from "./generated/prisma";
 import { compare } from "bcryptjs";
+import { makePrismaClient } from "./lib/prisma-client";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -15,6 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "Credentials",
       authorize: async (credentials) => {
+        console.log("authorize!!");
         try {
           // safeParseは{successs: true, data: ...}or{success: false, error: ...}を返す
           const validatedCredentials = loginFormSchema.safeParse(credentials);
@@ -23,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const password = validatedCredentials.data?.password;
           // emailまたはpasswordがない場合
           if (!email || !password) throw new MissingCredentialsError();
-          const prisma = new PrismaClient();
+          const prisma = makePrismaClient();
           // emailを用いてデータベースからユーザーを取得
           const user = await prisma.user.findUnique({ where: { email } });
           // ユーザーが取得できなかった場合
@@ -34,12 +36,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const isMatched = await compare(password, user.password);
           // 一致しなかった場合
           if (!isMatched) throw new InvalidPasswordError();
+          console.log("userData-before");
           // 一致した場合はユーザーのデータを返り値として返す
           const userData = {
             name: user.name,
             email: user.email,
             id: user.id,
           };
+          console.log("userData-after");
+          console.log("userData-return-auth: ", userData);
           return userData;
         } catch (err) {
           console.error("authorize-error", err);
@@ -52,5 +57,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/login",
+  },
+  callbacks: {
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (token.id && typeof token.id === "string") {
+        session.user.id = token.id;
+      }
+      return session;
+    },
   },
 });

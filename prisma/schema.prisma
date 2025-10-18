@@ -19,6 +19,55 @@ model User {
   name String
   email String @unique
   password String
+  rooms Room[]
+  messages Message[]
 
   @@map("users")
+}
+
+enum RoomType {
+  conversation
+  image_generation
+  text_to_speech
+  speech_to_text
+  image_analysis
+}
+
+model Room {
+  id String @id @default(cuid())
+  type RoomType
+  firstMessage String @map("first_message")
+  owner User  @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+  messages Message[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("rooms")
+}
+
+enum Sender {
+  user
+  assistant
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  AUDIO
+  IMAGE_PLUS_TEXT
+}
+
+model Message {
+  id String @id @default(cuid())
+  sender Sender
+  content String
+  type MessageType
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+  room Room @relation(fields: [roomId], references: [id])
+  roomId String @map("room_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("messages")
 }

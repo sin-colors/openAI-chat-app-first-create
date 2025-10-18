@@ -1,8 +1,12 @@
 import React from "react";
 import MobileNabvar from "./MobileNabvar";
 import LogoutButton from "./LogoutButton";
+import { auth } from "@/auth";
 
-function Navbar({ chatType }: { chatType: string }) {
+async function Navbar({ chatType }: { chatType: string }) {
+  const session = await auth();
+  console.log("session: ", session);
+  console.log("id: ", session?.user?.id);
   return (
     <div className="flex items-center justify-between p-3">
       <MobileNabvar chatType={chatType} />

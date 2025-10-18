@@ -36,7 +36,7 @@ function RegisterForm() {
           const result = await userRegister(data);
           if (result.success) {
             toast.success(result.message, { autoClose: 5000 });
-            setTimeout(() => router.push("/login"), 5000);
+            setTimeout(() => router.push("/login"), 3000);
           } else {
             toast.error(result.error || "エラーが発生しました");
           }
