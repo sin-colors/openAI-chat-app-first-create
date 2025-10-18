@@ -1,3 +1,4 @@
+"use client";
 import {
   Ellipsis,
   FileImage,
@@ -50,6 +51,7 @@ const routes = [
 ];
 
 function Sidebar({ chatType }: { chatType: string }) {
+  console.log("sidebar-called!");
   return (
     <div className="flex h-full flex-col space-y-4 bg-gray-900 p-3 text-white">
       <Link href="/" className="flex items-center pr-1">
@@ -63,9 +65,9 @@ function Sidebar({ chatType }: { chatType: string }) {
       </Link>
       <div className="space-y-1">
         {routes.map((route) => {
-          console.log("route.href", route.href);
-          console.log("chatType", chatType);
-          console.log(`/${chatType}`);
+          // console.log("route.href", route.href);
+          // console.log("chatType", chatType);
+          // console.log(`/${chatType}`);
           return (
             <Link
               href={route.href}
