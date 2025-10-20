@@ -16,6 +16,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { RoomValue } from "@/lib/schema";
+import { usePathname } from "next/navigation";
 
 const routes = [
   {
@@ -50,8 +52,11 @@ const routes = [
   },
 ];
 
-function Sidebar({ chatType }: { chatType: string }) {
+function Sidebar({ rooms }: { rooms: RoomValue[] }) {
   console.log("sidebar-called!");
+  const pathname = usePathname();
+  const chatType = pathname.split("/")[1];
+  const chatId = pathname.split("/")[2];
   return (
     <div className="flex h-full flex-col space-y-4 bg-gray-900 p-3 text-white">
       <Link href="/" className="flex items-center pr-1">
@@ -88,22 +93,31 @@ function Sidebar({ chatType }: { chatType: string }) {
       <div className="flex flex-col overflow-hidden">
         <h2 className="px-2 py-4 text-sm font-medium">チャット履歴</h2>
         <div className="overflow-auto">
-          <div id="abc" className="flex w-full items-center justify-between">
-            <Link
-              href={"#"}
-              className="block min-w-0 flex-1 rounded-md p-2 font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white"
+          {rooms.map((room) => (
+            <div
+              id="abc"
+              key={room.id}
+              className="flex w-full items-center justify-between"
             >
-              <p className="truncate font-medium">message</p>
-            </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-md p-2 font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white">
-                <Ellipsis size={16} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>削除</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+              <Link
+                href={`/${room.type}/${room.id}`}
+                className={cn(
+                  "block min-w-0 flex-1 rounded-md p-2 font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white",
+                  room.id === chatId ? "bg-white/10 text-white" : "",
+                )}
+              >
+                <p className="truncate font-medium">message</p>
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="rounded-md p-2 font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white">
+                  <Ellipsis size={16} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>削除</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ))}
         </div>
       </div>
     </div>
