@@ -34,6 +34,8 @@ export type LoginFormValues = z.infer<typeof loginFormSchema>;
 const roomTypeValues = Object.values(RoomType) as [RoomType, ...RoomType[]];
 // z.enumは、文字列の配列を受け取り、その配列内の文字列のみを許容するenum型を定義する
 export const roomTypeSchema = z.enum(roomTypeValues);
+export type RoomTypeValues = z.infer<typeof roomTypeSchema>;
+
 export const roomSchema = z.object({
   id: z.string(),
   type: roomTypeSchema,
