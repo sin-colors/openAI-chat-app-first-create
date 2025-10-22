@@ -24,7 +24,7 @@ async function ChatAppLayout({ children, params }: Props) {
       <div className="hidden bg-red-500 lg:block lg:w-1/5">
         <Sidebar rooms={rooms} />
       </div>
-      <main className="flex h-full w-full flex-col bg-blue-500 lg:w-4/5">
+      <main className="flex h-full w-full flex-col bg-blue-300 lg:w-4/5">
         <Navbar chatType={chatType} />
         {children}
       </main>
